@@ -30,18 +30,21 @@ pipeline {
         }
 
         stage('Docker Build & Push') {
-            steps {
-                script {
-                    withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
-                        sh """
-                        docker build -t $DOCKER_IMAGE .
-                        echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
-                        docker push $DOCKER_IMAGE
-                        """
-                    }
-                }
+    steps {
+        script {
+            withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', 
+                usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                
+                sh """
+                echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
+                docker build -t hemanth251/simple-app:latest . -f ./Dockerfile
+                docker push hemanth251/simple-app:latest
+                """
             }
         }
+    }
+}
+
 
         stage('Deploy') {
             steps {
