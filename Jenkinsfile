@@ -46,14 +46,4 @@ pipeline {
 }
 
 
-        stage('Deploy') {
-            steps {
-                sh """
-                docker stop simple-app || true
-                docker rm simple-app || true
-                docker run --rm -d --name simple-app -p 8080:8080 $DOCKER_IMAGE
-                """
-            }
-        }
-    }
-}
+       
